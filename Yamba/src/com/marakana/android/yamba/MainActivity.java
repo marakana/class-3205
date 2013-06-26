@@ -7,11 +7,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.marakana.android.yamba.clientlib.YambaClient;
+import com.marakana.android.yamba.clientlib.YambaClientException;
+
 public class MainActivity extends Activity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
     private Button buttonSubmit;
     private EditText editMsg;
+    
+    private YambaClient client;
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 			}
 		});
 */
+        // Create a YambaClient object
+        client = new YambaClient("student", "password");
         }
 
 	@Override
@@ -81,6 +88,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
 			// The Submit button was clicked
 			String msg = editMsg.getText().toString();
 			Log.i(TAG, "User entered: " + msg);
+			
+			// Clear the EditText content
+			editMsg.setText("");
+			
+			try {
+				// Post the new status message
+				client.postStatus(msg);
+			} catch (YambaClientException e) {
+				Log.e(TAG, "Unable to post status update", e);
+			}
+			
 			break;
 		default:
 			// Unknown button? We shouldn't be here!
