@@ -1,11 +1,14 @@
 package com.marakana.android.yamba;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.marakana.android.yamba.clientlib.YambaClient;
 import com.marakana.android.yamba.clientlib.YambaClientException;
@@ -15,6 +18,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
     private Button buttonSubmit;
     private EditText editMsg;
+    private Toast toast;
     
     private YambaClient client;
 
@@ -39,6 +43,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 			}
 		});
 */
+        
+        // Create and cache a Toast for reuse
+        toast = Toast.makeText(getApplicationContext(), null, Toast.LENGTH_LONG);
+        
         // Create a YambaClient object
         client = new YambaClient("student", "password");
         }
@@ -92,11 +100,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 			// Clear the EditText content
 			editMsg.setText("");
 			
-			try {
-				// Post the new status message
-				client.postStatus(msg);
-			} catch (YambaClientException e) {
-				Log.e(TAG, "Unable to post status update", e);
+			// Post the message -- as long as there is a message to post
+			if (!TextUtils.isEmpty(msg)) {
+				new PostStatusTask().execute(msg);
 			}
 			
 			break;
@@ -104,6 +110,29 @@ public class MainActivity extends Activity implements View.OnClickListener {
 			// Unknown button? We shouldn't be here!
 			Log.w(TAG, "An unknown button was clicked!");
 		}
+	}
+	
+	private class PostStatusTask extends AsyncTask<String, Void, Integer> {
+
+		@Override
+		protected Integer doInBackground(String... params) {
+			int resultMsg = R.string.post_status_fail;
+			try {
+				// Post the new status message
+				client.postStatus(params[0]);
+				resultMsg = R.string.post_status_success;
+			} catch (YambaClientException e) {
+				Log.e(TAG, "Unable to post status update", e);
+			}
+			return resultMsg;
+		}
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			toast.setText(result);
+			toast.show();
+		}
+		
 	}
 
     
