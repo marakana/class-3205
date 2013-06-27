@@ -29,6 +29,8 @@ public class ComposeFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		setRetainInstance(true);
 
 		// Create a YambaClient object
 		client = new YambaClient("student", "password");
