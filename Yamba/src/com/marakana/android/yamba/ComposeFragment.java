@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.marakana.android.yamba.clientlib.YambaClient;
 import com.marakana.android.yamba.clientlib.YambaClientException;
 
 public class ComposeFragment extends Fragment {
@@ -24,16 +23,11 @@ public class ComposeFragment extends Fragment {
 	private EditText editMsg;
 	private Toast toast;
 
-	private YambaClient client;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		setRetainInstance(true);
-
-		// Create a YambaClient object
-		client = new YambaClient("student", "password");
 	}
 
 	@SuppressLint("ShowToast")
@@ -84,7 +78,7 @@ public class ComposeFragment extends Fragment {
 			int resultMsg = R.string.post_status_fail;
 			try {
 				// Post the new status message
-				client.postStatus(params[0]);
+				YambaApplication.getYambaClient().postStatus(params[0]);
 				resultMsg = R.string.post_status_success;
 			} catch (YambaClientException e) {
 				Log.e(TAG, "Unable to post status update", e);
