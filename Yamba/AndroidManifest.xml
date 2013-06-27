@@ -13,7 +13,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_yamba"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" android:largeHeap="true">
+        android:theme="@style/AppTheme" android:largeHeap="true" android:name="YambaApplication">
         <activity
             android:name="MainActivity"
             android:label="@string/app_name" >
