@@ -96,14 +96,6 @@ public class ComposeFragment extends Fragment {
 			} catch (YambaClientException e) {
 				Log.e(TAG, "Unable to post status update", e);
 			}
-			try {
-				Thread.sleep(5000);
-				System.gc();
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			return resultMsg;
 		}
 
