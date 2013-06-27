@@ -1,5 +1,7 @@
 package com.marakana.android.yamba;
 
+import java.lang.ref.WeakReference;
+
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.AsyncTask;
@@ -67,11 +69,22 @@ public class ComposeFragment extends Fragment {
 
 		// Post the message -- as long as there is a message to post
 		if (!TextUtils.isEmpty(msg)) {
-			new PostStatusTask().execute(msg);
+			new PostStatusTask(this).execute(msg);
 		}
 	}
+	
+	public void reportPostResult(int result) {
+		toast.setText(result);
+		toast.show();
+	}
 
-	private class PostStatusTask extends AsyncTask<String, Void, Integer> {
+	private static class PostStatusTask extends AsyncTask<String, Void, Integer> {
+		
+		private WeakReference<ComposeFragment> fragmentRef;
+		public PostStatusTask(ComposeFragment fragment) {
+			super();
+			fragmentRef = new WeakReference<ComposeFragment>(fragment);
+		}
 
 		@Override
 		protected Integer doInBackground(String... params) {
@@ -83,13 +96,27 @@ public class ComposeFragment extends Fragment {
 			} catch (YambaClientException e) {
 				Log.e(TAG, "Unable to post status update", e);
 			}
+			try {
+				Thread.sleep(5000);
+				System.gc();
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return resultMsg;
 		}
 
 		@Override
 		protected void onPostExecute(Integer result) {
-			toast.setText(result);
-			toast.show();
+			ComposeFragment fragment = fragmentRef.get();
+			if (null != fragment) {
+				fragment.reportPostResult(result);
+			}
+			else {
+				if (BuildConfig.DEBUG)
+					Log.d(TAG, "Compose fragment destroyed before status post completed");
+			}
 		}
 	}
 }
