@@ -28,7 +28,7 @@ public class ComposeFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setRetainInstance(true);
 	}
 
@@ -72,15 +72,17 @@ public class ComposeFragment extends Fragment {
 			new PostStatusTask(this).execute(msg);
 		}
 	}
-	
+
 	public void reportPostResult(int result) {
 		toast.setText(result);
 		toast.show();
 	}
 
-	private static class PostStatusTask extends AsyncTask<String, Void, Integer> {
-		
+	private static class PostStatusTask extends
+			AsyncTask<String, Void, Integer> {
+
 		private WeakReference<ComposeFragment> fragmentRef;
+
 		public PostStatusTask(ComposeFragment fragment) {
 			super();
 			fragmentRef = new WeakReference<ComposeFragment>(fragment);
@@ -95,6 +97,8 @@ public class ComposeFragment extends Fragment {
 				resultMsg = R.string.post_status_success;
 			} catch (YambaClientException e) {
 				Log.e(TAG, "Unable to post status update", e);
+			} catch (IllegalArgumentException e) {
+				Log.e(TAG, "Invalid YambaClient object", e);
 			}
 			return resultMsg;
 		}
@@ -104,10 +108,10 @@ public class ComposeFragment extends Fragment {
 			ComposeFragment fragment = fragmentRef.get();
 			if (null != fragment) {
 				fragment.reportPostResult(result);
-			}
-			else {
+			} else {
 				if (BuildConfig.DEBUG)
-					Log.d(TAG, "Compose fragment destroyed before status post completed");
+					Log.d(TAG,
+							"Compose fragment destroyed before status post completed");
 			}
 		}
 	}

@@ -1,9 +1,9 @@
 package com.marakana.android.yamba;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 
-public class PrefsActivity extends PreferenceActivity {
+public class PrefsActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

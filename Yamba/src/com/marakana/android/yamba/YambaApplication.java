@@ -18,6 +18,8 @@ public class YambaApplication extends Application {
 	private static final Object clientLock = new Object();
 	
 	private static SharedPreferences prefs;
+	private AppPreferenceListener prefListener;
+	
 	private static final String prefKeyUser = "PREF_KEY_USER";
 	private static final String prefKeyPassword = "PREF_KEY_PASSWORD";
 	private static final Set<String> yambaClientPrefKeys;
@@ -35,21 +37,8 @@ public class YambaApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		prefs.registerOnSharedPreferenceChangeListener( new OnSharedPreferenceChangeListener() {
-			
-			@Override
-			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-					String key) {
-				if (BuildConfig.DEBUG) Log.d(TAG, "Preference changed: " + key);
-				// If any of the preferences related to the YambaClient change,
-				// discard any existing YambaClient.
-				if (yambaClientPrefKeys.contains(key)) {
-					synchronized (clientLock) {
-						yambaClient = null;
-					}
-				}
-			}
-		});
+		prefListener = new AppPreferenceListener();
+		prefs.registerOnSharedPreferenceChangeListener(prefListener);
 	}
 
 	public static YambaClient getYambaClient() {
@@ -61,6 +50,25 @@ public class YambaApplication extends Application {
 				yambaClient = new YambaClient(user, password);
 			}
 			return yambaClient;
+		}
+	}
+
+	// Because SharedPreferences maintains a *WeakReference* to it's listeners, we run
+	// into trouble using an anonymous local class instance as a listener.
+	// Here's an explicit class. We'll keep a reference to the listener object in
+	// an instance field.
+	private class AppPreferenceListener implements OnSharedPreferenceChangeListener {
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+				String key) {
+			if (BuildConfig.DEBUG) Log.d(TAG, "Preference changed: " + key);
+			// If any of the preferences related to the YambaClient change,
+			// discard any existing YambaClient.
+			if (yambaClientPrefKeys.contains(key)) {
+				synchronized (clientLock) {
+					yambaClient = null;
+				}
+			}
 		}
 	}
 
