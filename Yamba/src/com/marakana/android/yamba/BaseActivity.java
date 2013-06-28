@@ -5,11 +5,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class BaseActivity extends Activity {
-
-	public BaseActivity() {
-		super();
-	}
+public abstract class BaseActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
