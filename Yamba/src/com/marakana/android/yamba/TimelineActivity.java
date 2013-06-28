@@ -1,12 +1,11 @@
 package com.marakana.android.yamba;
 
-import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-public class TimelineActivity extends Activity {
+public class TimelineActivity extends BaseActivity {
 	
 	private Cursor cursor;
 	private SimpleCursorAdapter adapter;

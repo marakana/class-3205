@@ -2,22 +2,13 @@ package com.marakana.android.yamba;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends Activity {
+public class BaseActivity extends Activity {
 
-	private static final String TAG = "MainActivity";
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		if (BuildConfig.DEBUG)
-			Log.v(TAG, "onCreate() invoked");
-
-		setContentView(R.layout.activity_main);
+	public BaseActivity() {
+		super();
 	}
 
 	@Override
@@ -28,12 +19,24 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		Intent intent;
 		switch (id) {
+		case R.id.action_compose:
+			// Display the Compose Activity
+			intent = new Intent(this, ComposeActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			startActivity(intent);
+			return true;
+		case R.id.action_timeline:
+			// Display the Timeline Activity
+			intent = new Intent(this, TimelineActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			startActivity(intent);
+			return true;
 		case R.id.action_settings:
 			// Display the Preference Activity
 			intent = new Intent(this, PrefsActivity.class);
@@ -49,11 +52,5 @@ public class MainActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
+
 }
-
-
-
-
-
-
-

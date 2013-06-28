@@ -13,5 +13,7 @@
     <string name="pref_key_password_title">Password</string>
     <string name="action_refresh_title">Refresh</string>
     <string name="activity_timeline_title">Timeline</string>
+    <string name="action_timeline_title">Timeline</string>
+    <string name="action_compose_title">New Post</string>
 
 </resources>
