@@ -11,5 +11,7 @@
     <string name="post_status_fail">Failed to post status message</string>
     <string name="pref_key_user_title">User Name</string>
     <string name="pref_key_password_title">Password</string>
+    <string name="action_refresh_title">Refresh</string>
+    <string name="activity_timeline_title">Timeline</string>
 
 </resources>

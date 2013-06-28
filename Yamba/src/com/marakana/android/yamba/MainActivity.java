@@ -32,11 +32,17 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
+		Intent intent;
 		switch (id) {
 		case R.id.action_settings:
 			// Display the Preference Activity
-			Intent intent = new Intent(this, PrefsActivity.class);
+			intent = new Intent(this, PrefsActivity.class);
 			startActivity(intent);
+			return true;
+		case R.id.action_refresh:
+			// Start the UpdateService to fetch timeline data
+			intent = new Intent(this, UpdateService.class);
+			startService(intent);
 			return true;
 		default:
 			// It's not one of ours. Let the base class handle it.
